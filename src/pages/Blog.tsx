@@ -3,17 +3,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Clock, Calendar } from "lucide-react";
-import { mockPosts } from "@/data/mockPosts";
+import { Search, Clock, Calendar, Loader2 } from "lucide-react";
+import { useBlogPosts } from "@/hooks/useBlogPosts";
 import { BlogCategory } from "@/types/blog";
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<BlogCategory | "All">("All");
+  const { posts, loading, error } = useBlogPosts();
 
   const categories: (BlogCategory | "All")[] = ["All", "Web Design", "Technology", "History", "Personal Life"];
 
-  const filteredPosts = mockPosts.filter(post => {
+  const filteredPosts = posts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "All" || post.category === selectedCategory;
@@ -22,9 +23,31 @@ const Blog = () => {
   });
 
   const getCategoryCount = (category: BlogCategory | "All") => {
-    if (category === "All") return mockPosts.length;
-    return mockPosts.filter(post => post.category === category).length;
+    if (category === "All") return posts.length;
+    return posts.filter(post => post.category === category).length;
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen py-12 flex items-center justify-center">
+        <div className="flex items-center gap-3">
+          <Loader2 className="w-6 h-6 animate-spin text-primary" />
+          <span className="text-lg">Loading blog posts...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen py-12 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4 text-destructive">Error loading posts</h2>
+          <p className="text-muted-foreground">{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen py-12">

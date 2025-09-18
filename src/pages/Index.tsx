@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Code, History, MessageCircle, Calculator } from "lucide-react";
+import { ArrowRight, Code, History, MessageCircle, Calculator, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { mockPosts } from "@/data/mockPosts";
+import { useBlogPosts } from "@/hooks/useBlogPosts";
 import brianPortrait from "@/assets/brian-portrait.jpg";
 
 const Index = () => {
-  const latestPosts = mockPosts.slice(0, 3);
+  const { posts, loading } = useBlogPosts();
+  const latestPosts = posts.slice(0, 3);
   
   const interests = [
     { icon: History, title: "History", description: "Exploring the rich heritage of Kenya and world civilizations" },
@@ -95,37 +96,46 @@ const Index = () => {
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {latestPosts.map((post) => (
-              <Card key={post.id} className="blog-card group">
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20">
-                      {post.category}
-                    </Badge>
-                    <span className="text-sm text-muted-foreground">
-                      {post.readTime} min read
-                    </span>
-                  </div>
-                  <CardTitle className="text-xl font-serif group-hover:text-primary transition-smooth">
-                    {post.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base leading-relaxed mb-4">
-                    {post.excerpt}
-                  </CardDescription>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">
-                      {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {loading ? (
+              <div className="col-span-full flex justify-center py-8">
+                <div className="flex items-center gap-3">
+                  <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                  <span>Loading latest posts...</span>
+                </div>
+              </div>
+            ) : (
+              latestPosts.map((post) => (
+                <Card key={post.id} className="blog-card group">
+                  <CardHeader>
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20">
+                        {post.category}
+                      </Badge>
+                      <span className="text-sm text-muted-foreground">
+                        {post.readTime} min read
+                      </span>
+                    </div>
+                    <CardTitle className="text-xl font-serif group-hover:text-primary transition-smooth">
+                      {post.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-base leading-relaxed mb-4">
+                      {post.excerpt}
+                    </CardDescription>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">
+                        {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
           <div className="text-center mt-12">
             <Button asChild size="lg" className="transition-smooth hover:scale-105">

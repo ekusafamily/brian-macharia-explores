@@ -111,9 +111,9 @@ const Index = () => {
                       <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20">
                         {post.category}
                       </Badge>
-                      <span className="text-sm text-muted-foreground">
-                        {post.readTime} min read
-                      </span>
+                       <span className="text-sm text-muted-foreground">
+                         {post.read_time} min read
+                       </span>
                     </div>
                     <CardTitle className="text-xl font-serif group-hover:text-primary transition-smooth">
                       {post.title}
@@ -125,7 +125,7 @@ const Index = () => {
                     </CardDescription>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">
-                        {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                        {new Date(post.published_at).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric'

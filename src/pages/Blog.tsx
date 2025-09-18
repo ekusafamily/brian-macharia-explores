@@ -115,10 +115,10 @@ const Blog = () => {
                     >
                       {post.category}
                     </Badge>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Clock className="w-4 h-4" />
-                      {post.readTime} min
-                    </div>
+                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                       <Clock className="w-4 h-4" />
+                       {post.read_time} min
+                     </div>
                   </div>
                   <CardTitle className="text-xl font-serif group-hover:text-primary transition-smooth leading-tight">
                     {post.title}
@@ -130,7 +130,7 @@ const Blog = () => {
                   </CardDescription>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Calendar className="w-4 h-4" />
-                    {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                    {new Date(post.published_at).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'
